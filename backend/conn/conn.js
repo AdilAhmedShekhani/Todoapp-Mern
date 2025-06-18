@@ -1,14 +1,11 @@
 const mongoose = require("mongoose");
 
-const conn = async (req, res) => {
+const conn = async () => {
     try {
-        await mongoose.connect("mongodb+srv://user:<Password>@user.kt7eepx.mongodb.net").then(() => {
-            console.log("Connected");
-        });
+        await mongoose.connect("mongodb+srv://user:Adil%40345@user.kt7eepx.mongodb.net/?retryWrites=true&w=majority&appName=user")
+    console.log("✅ MongoDB Connected Successfully");
     } catch (error) {
-        res.status(400).json({
-            message: "Not Connected",
-        });
+        console.error("❌ MongoDB Connection Failed:", error.message);
     }
 };
 
