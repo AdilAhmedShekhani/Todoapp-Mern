@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import "./signup.css";
 import HeadingComp from "./HeadingComp";
+import { useNavigate } from "react-router-dom"
+
 const Signin = () => {
+  const history = useNavigate()
+  const [Inputs, setInputs] = useState({ email: "", password: "", })
+  const change = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...Inputs, [name]: value })
+  }
+  const submit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:1000/api/v1/signin", Inputs);
+      console.log(response.data);
+      history("/todo");
+    } catch (error) {
+      console.error("Login failed:", error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || "Login failed");
+    }
+  };
+
   return (
     <div>
       <div className="signup">
@@ -17,6 +38,9 @@ const Signin = () => {
                   type="email"
                   name="email"
                   placeholder="Enter Your Email"
+                  value={Inputs.email}
+                  onChange={change}
+
                 />
 
                 <input
@@ -24,9 +48,11 @@ const Signin = () => {
                   type="password"
                   name="password"
                   placeholder="Enter Your Password"
+                  value={Inputs.password}
+                  onChange={change}
                 />
 
-                <button className="btn-signup p-2">Sign In</button>
+                <button className="btn-signup p-2" onClick={submit}>Sign In</button>
               </div>
             </div>
           </div>
