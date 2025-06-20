@@ -1,27 +1,30 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./signup.css";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store";
 import HeadingComp from "./HeadingComp";
 import { useNavigate } from "react-router-dom"
 
 const Signin = () => {
+  const dispatch = useDispatch();
+
   const history = useNavigate()
-  const [Inputs, setInputs] = useState({ email: "", password: "", })
+  const [Inputs, setInputs] = useState({ email: "", password: "", });
   const change = (e) => {
     const { name, value } = e.target;
     setInputs({ ...Inputs, [name]: value })
-  }
+  };
   const submit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:1000/api/v1/signin", Inputs);
-      console.log(response.data);
+    await axios.post("http://localhost:1000/api/v1/signin", Inputs).then((response) => {
+      sessionStorage.setItem("id", response.data.others._id)
+      dispatch(authActions.login())
       history("/todo");
-    } catch (error) {
-      console.error("Login failed:", error.response?.data?.message || error.message);
-      alert(error.response?.data?.message || "Login failed");
-    }
-  };
+    })
+
+  }
+
 
   return (
     <div>
@@ -60,6 +63,6 @@ const Signin = () => {
       </div>
     </div>
   );
-};
 
+};
 export default Signin;
