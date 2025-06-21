@@ -1,21 +1,22 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
-require("./conn/conn");
-const cors = require("cors")
-const auth = require("./routes/auth");
-const list = require("./routes/list");
-app.use(express.json());
-app.use(cors())
 
+require("./connection/connection");
+
+const authRoutes = require("./routes/auth");
+const listRoutes = require("./routes/list"); // ✅ Import your task routes here
+
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("Hello");
+  res.send("Hello World!");
 });
 
+app.use("/api/v1", authRoutes);  // Signin/Register
+app.use("/api/v2", listRoutes);  // Todo routes
 
-app.use("/api/v1", auth);
-app.use("/api/v2", list);
-
-app.listen(1000, () => {
-    console.log("Server Started");
+app.listen(5000, () => {
+  console.log("Server is running on port 5000");
 });

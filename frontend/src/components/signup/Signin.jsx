@@ -3,7 +3,7 @@ import axios from "axios";
 import "./signup.css";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store";
-import HeadingComp from "./HeadingComp";
+import HeadingComp from "./Headingcomp";
 import { useNavigate } from "react-router-dom"
 
 const Signin = () => {
@@ -16,14 +16,15 @@ const Signin = () => {
     setInputs({ ...Inputs, [name]: value })
   };
   const submit = async (e) => {
-    e.preventDefault();
-    await axios.post("http://localhost:1000/api/v1/signin", Inputs).then((response) => {
-      sessionStorage.setItem("id", response.data.others._id)
-      dispatch(authActions.login())
-      history("/todo");
-    })
+  e.preventDefault();
+  await axios.post("http://localhost:5000/api/v1/signin", Inputs).then((response) => {
+    sessionStorage.setItem("id", response.data.others._id);
+    sessionStorage.setItem("email", response.data.others.email); // 👈 Save email
+    dispatch(authActions.login());
+    history("/todo");
+  });
+};
 
-  }
 
 
   return (
